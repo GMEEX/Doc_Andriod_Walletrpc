@@ -1,0 +1,37 @@
+
+参考网址：
+https://blog.csdn.net/qq_36628908/article/details/80243713
+
+nginx文档目录：/usr/local/nginx/html/、/usr/local/nginx/conf/
+
+注意事项：
+1、api.bizzan.com 与 www.bizzan.com需要转发不同服务
+2、需要api.bizzan.com支持websocket
+
+
+===========================
+依赖环境
+yum install -y wget  
+yum install -y vim-enhanced  
+yum install -y make cmake gcc gcc-c++  
+yum install -y pcre pcre-devel
+yum install -y zlib zlib-devel
+yum install -y openssl openssl-devel
+
+下载nginx-1.12.2.tar.gz
+wget http://nginx.org/download/nginx-1.12.2.tar.gz
+
+编译安装 
+tar -zxvf nginx-1.12.2.tar.gz 
+cd nginx-1.12.2
+
+./configure --prefix=/usr/local/nginx --pid-path=/var/run/nginx/nginx.pid --lock-path=/var/lock/nginx.lock --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-http_gzip_static_module --http-client-body-temp-path=/var/temp/nginx/client --http-proxy-temp-path=/var/temp/nginx/proxy --http-fastcgi-temp-path=/var/temp/nginx/fastcgi --http-uwsgi-temp-path=/var/temp/nginx/uwsgi --with-http_stub_status_module --with-http_ssl_module --http-scgi-temp-path=/var/temp/nginx/scgi --with-stream --with-stream_ssl_module
+
+make 
+make install
+
+1、启动nginx
+进入/usr/local/nginx/sbin/，执行./nginx
+
+2、修改配置文件后，重载配置文件
+./nginx -s reload

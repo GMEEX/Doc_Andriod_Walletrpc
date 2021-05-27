@@ -1,0 +1,148 @@
+新建目录：/data/mongodb/data    、 /data/mongodb/log
+wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-4.0.19.tgz
+tar -xvf mongodb-linux-x86_64-rhel62-4.0.19.tgz
+/data/mongodb/目录下新建文件mongodb.conf
+cd进入mongodb的bin目录，执行：./mongod  -f /data/mongodb/mongodb.conf
+
+测试Mongodb：
+cd到bin目录下，执行连接命令：./mongo 127.0.0.1:27017
+
+
+
+
+
+
+
+
+软件版本:mongodb-linux-x86_64-ubuntu1604-4.0.0.tgz
+
+参考文章：https://blog.csdn.net/zn505119020/article/details/81331808
+
+1、下载地址：https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-4.0.0.tgz
+2、/data/mongo目录下新建data、log
+3、新建配置文件在/data/mongo下，
+4、解压tgz文件，进入bin，执行：./mongod  -f /data/mongodb/mongodb.conf，如果报错：./mongod: error while loading shared libraries: libcurl.so.4，则执行：apt-get install libcurl4-openssl-dev安装
+
+创建管理员账户
+use admin
+db.createUser({ user: "root", pwd: "tydusl36dds1", roles: [{ role: "userAdminAnyDatabase", db: "admin" }] })
+
+db.auth("root","tydusl36dds1")
+
+db.auth("bizzan","tydusl36dds1")
+
+
+创建数据库账户
+use bitrade
+db.createUser({ user: "bizzan", pwd: "tydusl36dds1", roles: [{ role: "dbOwner", db: "bitrade" }] })
+
+use wallet
+db.createUser({ user: "bizzan", pwd: "tydusl36dds1", roles: [{ role: "dbOwner", db: "wallet" }], mechanisms : ["SCRAM-SHA-1"]  })
+
+有时这句话无法正确执行，可以用一下语句
+db.createUser({ user: "bizzan", pwd: "tydusl36dds1", roles: [{ role: "dbOwner", db: "wallet" }] })
+
+use robot
+db.createUser({ user: "bizzan", pwd: "tydusl36dds1", roles: [{ role: "dbOwner", db: "robot" }] })
+
+db.auth("bizzan","tydusl36dds1")
+
+
+开放防火墙，注意是27017
+iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 8801 -j ACCEPT
+
+在另一台机器运行下列命令（需将mongo压缩包拷贝的新机器上并解压，进入bin目录下执行）
+./mongo 127.0.0.1:27017
+windows在C:\Program Files\MongoDB\Server\3.6\bin目录下执行命令
+经测试：内网、外网都可连接
+
+【日志切割/删除】
+>ps -def | grep mongod
+=root     10728     1 28 Jun26 ?        20-10:43:52 ./mongod -f /data/mongo/mongodb.conf
+查找到mongo服务的进程号
+
+>kill -SIGUSR1 10728
+发送进程信号，mongodb进程收到该信号后，会自动生成一个带日期的日志文件，带日期的日志文件可以删除
+
+
+【命令行使用】
+查询所有集合：show collections
+查询集合中数据列表：db.getCollection("watcher_log").find()
+删除集合：db.getCollection("xxxxx").drop()
+
+db.getCollection("exchange_kline_BCH/USDT_1").drop();
+db.getCollection("exchange_kline_LTC/USDT_10min").drop();
+db.getCollection("exchange_kline_LTC/USDT_15min").drop();
+db.getCollection("exchange_kline_LTC/USDT_1day").drop();
+db.getCollection("exchange_kline_LTC/USDT_1hour").drop();
+db.getCollection("exchange_kline_LTC/USDT_1min").drop();
+db.getCollection("exchange_kline_BCH/USDT_1week").drop();
+db.getCollection("exchange_kline_LTC/USDT_30min").drop();
+db.getCollection("exchange_kline_LTC/USDT_5min").drop();
+
+db.getCollection("exchange_order_detail").count();
+============
+IP地址：172.17.0.4
+端口：27017
+数据库：bitrade
+用户：bizzan
+密码：shaoxianjun95
+
+登录mongo的行情数据库
+use bitrade;
+db.auth("bizzan","tydusl36dds1");
+
+db.getCollection("exchange_kline_BCH/BTC_1week").drop();
+db.getCollection("exchange_kline_ETH/USDT_1week").drop();
+db.getCollection("exchange_kline_BTC/USDT_1week").drop();
+db.getCollection("exchange_kline_BTEF/USDT_10min").drop();
+db.getCollection("exchange_kline_BCH/USDT_15min").drop();
+db.getCollection("exchange_kline_BCH/USDT_1hour").drop();
+db.getCollection("exchange_kline_BTEF/USDT_1min").drop();
+db.getCollection("exchange_kline_BTEF/USDT_30min").drop();
+db.getCollection("exchange_kline_BTEF/USDT_5min").drop();
+db.getCollection("exchange_kline_BTC/USDT_1day").drop();
+db.getCollection("exchange_kline_BZB/USDT_10min").drop();
+db.getCollection("exchange_kline_BZB/USDT_15min").drop();
+db.getCollection("exchange_kline_BZB/USDT_1day").drop();
+db.getCollection("exchange_kline_BZB/USDT_1hour").drop();
+db.getCollection("exchange_kline_BZB/USDT_1min").drop();
+db.getCollection("exchange_kline_BZB/USDT_30min").drop();
+db.getCollection("exchange_kline_BZB/USDT_5min").drop();
+db.getCollection("exchange_kline_ETH/BTC_10min").drop();
+db.getCollection("exchange_kline_ETH/BTC_15min").drop();
+db.getCollection("exchange_kline_ETH/BTC_1day").drop();
+db.getCollection("exchange_kline_ETH/BTC_1hour").drop();
+db.getCollection("exchange_kline_ETH/BTC_1min").drop();
+db.getCollection("exchange_kline_ETH/BTC_30min").drop();
+db.getCollection("exchange_kline_ETH/BTC_5min").drop();
+db.getCollection("exchange_kline_ETH/USDT_10min").drop();
+db.getCollection("exchange_kline_ETH/USDT_15min").drop();
+db.getCollection("exchange_kline_ETH/USDT_1day").drop();
+db.getCollection("exchange_kline_ETH/USDT_1hour").drop();
+db.getCollection("exchange_kline_ETH/USDT_1min").drop();
+db.getCollection("exchange_kline_ETH/USDT_30min").drop();
+db.getCollection("exchange_kline_ETH/USDT_5min").drop();
+db.getCollection("exchange_order_detail").drop();
+db.getCollection("exchange_trade_BTC/USDT").drop();
+db.getCollection("exchange_trade_BTEF/USDT").drop();
+db.getCollection("exchange_trade_ETH/BTC").drop();
+db.getCollection("exchange_trade_ETH/USDT").drop();
+db.getCollection("exchange_turnover_statistics").drop();
+db.getCollection("member_log").drop();
+db.getCollection("order_detail_aggregation").drop();
+db.getCollection("turnover_statistics").drop();
+
+//清理订单相关数据库
+truncate table `exchange_order`;
+truncate table `member_transaction`;
+truncate table `member_wallet_history`;
+
+
+db.getCollection("exchange_kline_PDX/USDT_1min").find({time:{$gt:1591330080000}}).forEach( function(item){ db.getCollection('exchange_kline_PDX/USDT_1min').update({"_id":item._id},{$set:{“openPrice": 0.370600,”highestPrice”:0.370600,”lowestPrice”:0.370600,”closePrice”:0.370600}})})
+
+
+db.getCollection("watcher_log").find({coinName:"Bitcoin"}).forEach();
+
+db.getCollection("watcher_log").update({"_id": ObjectId("5ef2593711a0033c87cbcbd2")},{$set:{"lastSyncHeight":636240}},false,false);
+

@@ -1,0 +1,6 @@
+# 硬盘挂载
+建立区块链节点的时候，需要挂载大容量硬盘。
+
+> fdisk -l
+> mkfs.ext4 /dev/vdb
+> mount /dev/vdb /data

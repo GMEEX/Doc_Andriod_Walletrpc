@@ -1,0 +1,48 @@
+============================================
+======注意：本手册为单机版zookeeper及kafka安装手册========
+============================================
+
+安装zookeeper
+参考网址：https://blog.csdn.net/u010889616/article/details/80171307
+1、下载zookeeper（软件版本：zookeeper-3.4.14.tar.gz）
+2、复制到/data/kafka/目录下，tar -xvf解压
+	tar -xvf zookeeper-3.4.14.tar.gz
+3、新建zookeeper数据目录/data/kafka/zookeeper
+	mkdir zookeeper
+3、修改conf/zoo_sample.cfg文件，重命名为zoo.cfg
+	> 上传zoo.cfg到conf文件夹下
+4、命令行启动：
+	> screen -S zookeeper
+	> ./zkServer.sh start-foreground
+
+测试连接：bin/zkCli.sh -server 10.140.0.12:2181
+
+
+安装kafka
+参考网址：https://blog.csdn.net/u010889616/article/details/80641922
+1、下载kafka（软件版本：kafka_2.11-2.2.1.tgz）
+2、赋值到/data/kafka/kafka/目录下，tar -xvf解压
+3、新建log文件夹：/data/kafka/kafka/log，更改权限chmod 777 log
+4、修改conf/server.properties配置文件
+	修改点：advertised.listeners==PLAINTEXT://本机IP:9092
+5、命令行启动：
+	> screen -S kafka
+	> bin/kafka-server-start.sh config/server.properties
+
+测试：
+1、创建topic：bin/kafka-topics.sh --create --zookeeper 101.32.1.237:2181 --replication-factor 1 --partitions 1 --topic test
+2、查看topic：bin/kafka-topics.sh --list --zookeeper 172.19.0.15:2181
+3、topic生产者：bin/kafka-console-producer.sh --broker-list 172.19.0.15:9092 --topic test
+4、新开命令行，启动topic消费者：bin/kafka-console-consumer.sh --bootstrap-server 172.19.0.15:9092 --topic test --from-beginning
+现在在生产者命令行输入任意字符，消费者都能收到
+
+
+bin/kafka-topics.sh --describe --zookeeper 172.19.0.15:2181 --topic exchange-trade-mocker
+启动完毕
+make install PREFIX=/root/redis-test/redis-4.0.11/
+./redis-cli  -h 172.17.0.5 -p 6379 -a shaoxianjun95
+【注意】：
+使用版本kafka_2.12-2.3.0，会出现错误，Commit can
+
+进程查看
+ps -ef |grep kafka

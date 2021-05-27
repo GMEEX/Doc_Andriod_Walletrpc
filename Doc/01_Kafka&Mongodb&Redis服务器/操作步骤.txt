@@ -1,0 +1,69 @@
+# 基础环境准备
+
+> yum install screen.x86_64
+> yum install java-1.8.0-openjdk.x86_64
+
+# 创建文件夹
+
+> cd /data/
+> mkdir kafka 
+> cd kafka
+> mkdir zookeeper
+> mkdir log
+> chmod 777 log
+
+> 上传文件：kafka_2.11-2.2.1.tgz 和 zookeeper-3.4.14.tar.gz 到/data/kafka/目录
+
+# 安装&运行Zookeeper
+
+> tar -xvf zookeeper-3.4.14.tar.gz
+> 上传zoo.cfg到conf文件夹下(无需修改，里面默认数据路径是/data/kafka/zookeeper)
+> screen -S zookeeper
+> cd /data/kafka/zookeeper-3.4.14/bin/
+> ./zkServer.sh start-foreground
+
+# 安装&运行Kafka
+
+> tar -xvf kafka_2.11-2.2.1.tgz
+> 修改server.properties（修改点：advertised.listeners==PLAINTEXT://本机IP:9092）
+> screen -S kafka
+> cd /data/kafka/kafka_2.11-2.2.1/
+> bin/kafka-server-start.sh config/server.properties
+
+
+# 安装运行Mongodb
+
+> cd /data/
+> mkdir mongodb
+> cd mongodb
+> mkdir data
+> mkdir log
+> wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel62-4.0.19.tgz
+> tar -xvf mongodb-linux-x86_64-rhel62-4.0.19.tgz
+> 上传mongodb.conf文件到/data/mongodb/目录下(路径一致的话，就无需修改配置文件)
+> cd /data/mongodb/mongodb-linux-x86_64-rhel62-4.0.19/bin/
+> ./mongod -f /data/mongodb/mongodb.conf
+
+# 新建MongoDB数据库和用户
+
+> cd /data/mongodb/mongodb-linux-x86_64-rhel62-4.0.19/bin/
+> ./mongo 127.0.0.1:27017
+
+> use admin
+> db.createUser({ user: "root", pwd: "abcd123456", roles: [{ role: "userAdminAnyDatabase", db: "admin" }] })
+
+> db.auth("root","abcd123456")
+> use bitrade
+> db.createUser({ user: "bizzan", pwd: "abcd123456", roles: [{ role: "dbOwner", db: "bitrade" }] })
+
+> use wallet
+> db.createUser({ user: "bizzan", pwd: "abcd123456", roles: [{ role: "dbOwner", db: "wallet" }], mechanisms : ["SCRAM-SHA-1"]  })
+
+> use robot
+> db.createUser({ user: "bizzan", pwd: "abcd123456", roles: [{ role: "dbOwner", db: "robot" }] })
+
+# Redis安装
+
+> yum install redis -y
+> 复制redis.conf文件到/etc/目录下, 配置文件中可修改密码：requirepass(默认：jfkdujsu44disk)
+> redis-server /etc/redis.conf

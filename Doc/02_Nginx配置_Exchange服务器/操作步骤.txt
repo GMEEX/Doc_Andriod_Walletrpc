@@ -1,0 +1,26 @@
+# 基础环境准备
+
+> yum install screen.x86_64
+> yum install java-1.8.0-openjdk.x86_64
+
+# 创建文件夹
+> cd ~
+> mkdir exchagne
+
+# 安装Nginx
+
+> yum install nginx.x86_64
+> -- 配置文件目录：/etc/nginx/conf.d
+> -- 资源文件目录：/usr/share/nginx/html/
+> 上传配置文件：default.conf （无需修改）
+> service nginx start/stop
+
+# 上传jar包至 /root/exchange/ 目录下
+
+> java -jar cloud.jar
+> java -jar exchange.jar (须等cloud.jar完全启动)
+> java -jar market.jar (须等exchange.jar完全启动)
+> java -jar exchange-api.jar (须等market.jar完全启动)
+> java -jar ucenter.jar
+> java -jar wallet.jar
+> java -jar otc-api.jar

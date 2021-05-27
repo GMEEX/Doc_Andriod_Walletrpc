@@ -1,0 +1,52 @@
+1、将[安装文件]中ETH节点复制到云服务器/data/eth/目录下
+2、用命令tar -xvf xxxxxxxxxxx.tar.gz 解压安装文件
+3、在目录/data/eth/下新建文件夹data，用于存储ETH区块数据
+
+下载1.9.15版本的ETH节点
+
+wget https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.9.15-0f77f34b.tar.gz
+
+4、移动到/data/eth/geth-linux-amd64-1.9.1-b7b2f60f/目录下，执行命令：
+./geth --datadir /blockchain/eth/data --cache 1024  --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --syncmode "light"
+
+或者执行fast模式（180G左右）：
+./geth --datadir /blockchain/eth/data --cache 1024  --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --syncmode "fast"
+
+5、可以看到已经开始自动同步ETH节点状态
+
+
+注意：
+1、本节点同步模式为Light，不会同步ETH区块数据，只有当需要的时候，才会从全节点上获取区块数据，包含交易等。
+2、所有私钥文件存储在/data/eth/data/keystore/目录下，切记保证安全
+
+连接RPC节点
+./geth attach rpc:"/blockchain/eth/data/geth.ipc"
+
+查看对等节点数量：net.peerCount
+查看同步状态：eth.syncing
+查看区块数量：eth.blockNumber(注意，同步过程中会一直是0，直到同步完成才显示区块实际高度）
+
+创建一个钱包，然后将钱包地址和密码输入到eth rpc项目中
+personal.newAccount("wm123456")
+
+glibc错误：（参考：https://blog.csdn.net/xiong1250/article/details/90730609）
+wget http://ftp.gnu.org/gnu/glibc/glibc-2.14.tar.gz 
+wget http://ftp.gnu.org/gnu/glibc/glibc-ports-2.14.tar.gz 
+tar -xvf  glibc-2.14.tar.gz 
+tar -xvf  glibc-ports-2.14.tar.gz
+mv glibc-ports-2.14 glibc-2.14/ports
+mkdir glibc-build-2.14
+cd glibc-build-2.14/ 
+../glibc-2.14/configure  --prefix=/usr --disable-profile --enable-add-ons --with-headers=/usr/include --with-binutils=/usr/bin
+
+make
+
+make install
+
+ll /lib64/libc.so.6 
+
+错误：no acceptable C compiler found in $PATH
+解决办法：yum -y install gcc
+
+export MAVEN_HOME=/Users/alpha/Documents/02_Software/apache-maven-3.6.3
+export PATH=$PATH:$MAVEN_HOME/bin

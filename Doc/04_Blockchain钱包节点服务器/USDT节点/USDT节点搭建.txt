@@ -1,0 +1,43 @@
+下载可执行文件：http://www.omnilayer.org/download.html
+用这个版本： omnicore-0.8.2-x86_64-linux-gnu.tar.gz
+
+wget https://github.com/OmniLayer/omnicore/releases/download/v0.8.2/omnicore-0.8.2-x86_64-linux-gnu.tar.gz
+
+1、将下载文件放到/data/usdt/目录下
+2、在/data/usdt/目录下新建data文件夹
+3、在/data/usdt/目录下新建bitcoin.conf文件
+4、在/data/usdt/omnicore-0.5.0/bin/下执行命令：./omnicored -conf=/data/usdt/bitcoin.conf -reindex  -deprecatedrpc=accounts，命令行信息如下：
+====================
+2019-08-13 03:20:56 Initializing Omni Core v0.5.0 [main]
+2019-08-13 03:20:56 Loading trades database: OK
+2019-08-13 03:20:56 Loading send-to-owners database: OK
+2019-08-13 03:20:56 Loading tx meta-info database: OK
+2019-08-13 03:20:56 Loading smart property database: OK
+2019-08-13 03:20:56 Loading master transactions database: OK
+2019-08-13 03:20:56 Loading fee cache database: OK
+2019-08-13 03:20:56 Loading fee history database: OK
+2019-08-13 03:20:56 Loading persistent state: NONE (no usable previous state found)
+2019-08-13 03:20:56 Omni Core initialization completed
+====================
+注意：如果是以前同步过区块，并且用的是reindex，那么重新启动的时候，需要用以下命令：
+./omnicored -conf=/data/usdt/bitcoin.conf -reindex-chainstate -deprecatedrpc=accounts
+上面的命令不会重新索引，而是使用上次索引过的数据
+====================
+5、自此，usdt节点启动成功，已经开始同步区块，其中同步日志放在/data/usdt/data/debug.log文件夹中
+6、如何查看当前区块同步信息：进入/data/usdt/omnicore-0.5.0/bin/目录执行如下命令：
+      获取当前区块信息：./omnicore-cli -rpcconnect=127.0.0.1 -rpcuser=bizzan -rpcpassword=8897364ddefs -rpcport=8334 getblockchaininfo
+      命令行信息如下（其中blocks即为当前同步区块高度）：
+====================
+{
+  "chain": "main",
+  "blocks": 295978,
+  "headers": 589877,
+  "bestblockhash": "0000000000000000060a02b55752c56edeeafe25a47c1abfdb65468bf1e5c985",
+  "difficulty": 6119726089.128147,
+  "mediantime": 1397562780,
+  "verificationprogress": 0.06151967312105129,
+  "chainwork": "000000000000000000000000000000000000000000003fb9da1c8bfa17a8f117",
+====================
+  "pruned": false,
+  "softforks": [
+

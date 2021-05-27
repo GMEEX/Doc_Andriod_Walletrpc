@@ -1,0 +1,36 @@
+# 机器人自动重启脚本配置
+# 该定时任务，专门用于解决部分客户机器人异常停止的情况
+# 出现异常停止的情况目前出现在以下用户的配置场景
+#   1、服务器单机部署，或双机部署，性能易出现瓶颈
+#   2、Exchange-api.jar的日志出现Broken pipe错误提示
+============================================================
+1、确保 /root/robot/ 目录下存放er_robot_normal.jar文件
+
+2、上传 restartRobot.sh 到 /root/robot/ 目录
+
+3、修改脚本为可执行文件
+   > chmod 777 restartRobot.sh  或 chmod +x restartRobot.sh
+
+4、查看定时任务是否开启
+   > service crond status
+   > crond (pid  1522) is running...  (输出，说明运行中)
+
+5、查看当前定时任务列表
+   > crontab -l
+   > no crontab for root  (说明无任务)
+
+6、编辑当前用户的定时任务
+   > crontab -e
+   进入编辑页面后，按 i 键进入插入编辑模式，复制以下代码：
+
+   */20 * * * *  /root/robot/restartRobot.sh
+   # 表示每20分钟执行一次脚本，脚本完成的功能就是重启er_robot_normal.jar
+
+   按ESC键，进入命令模式，输入 : + w + q，保存退出
+
+7、重载定时任务
+   > service crond reload
+
+8、查看定时任务是否已加载
+   > crontab -l
+   > */20 * * * * root /root/robot/restartRobot.sh  (说明定时任务已加载)
